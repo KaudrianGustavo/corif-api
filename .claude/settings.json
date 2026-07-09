@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"c:\\\\Users\\\\gustavo.oliveira\\\\Music\\\\Corif\\\\corif-api\" mv app/Http/Controllers/OpenApi/OpenApi.php app/Http/Controllers/OpenApi/OpenApiSpec.php)",
+      "Bash(mv \"c:\\\\Users\\\\gustavo.oliveira\\\\Music\\\\Corif\\\\corif-api\\\\app\\\\Http\\\\Controllers\\\\OpenApi\\\\OpenApi.php\" \"c:\\\\Users\\\\gustavo.oliveira\\\\Music\\\\Corif\\\\corif-api\\\\app\\\\Http\\\\Controllers\\\\OpenApi\\\\OpenApiSpec.php\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\gustavo.oliveira\\Music\\Corif\\corif-api\\app\\Http\\Controllers\\OpenApi"
+    ]
+  }
+}
