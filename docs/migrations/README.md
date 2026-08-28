@@ -29,13 +29,32 @@ Migrations existentes hoje (todas herdadas do skeleton padrão do Laravel — ne
 
 | Migration | Tabelas criadas | Observação |
 |---|---|---|
-| `0001_01_01_000000_create_users_table` | `users`, `password_reset_tokens`, `sessions` | Model `User` padrão do Laravel, ainda não adaptado ao domínio CORIF. |
+| `0001_01_01_000000_create_users_table` | `users` *(renomeada depois — ver abaixo)*, `password_reset_tokens`, `sessions` | Model `User` padrão do Laravel. |
 | `0001_01_01_000001_create_cache_table` | `cache`, `cache_locks` | Suporte ao driver de cache em banco (`CACHE_STORE=database`). |
 | `0001_01_01_000002_create_jobs_table` | `jobs`, `job_batches`, `failed_jobs` | Suporte a filas (`QUEUE_CONNECTION=database`). |
+| `2026_08_28_140401_add_tipo_user_to_users_table` | altera `users` (+coluna `tipo_user`) | Classifica o usuário (0=Admin, 1=Gestor, 2=Professor, 3=Aluno) — ver [entidades/#2](../entidades/README.md#2-papéis-atores-do-sistema). Default `3` (Aluno), para o autocadastro público. |
+| `2026_08_28_140459_create_cursos_table` | `cursos` | Só `id` + `timestamps` até agora — colunas de negócio (nome, descrição, status) ainda não definidas. |
+| `2026_08_28_140826_rename_users_table_to_usuarios` | renomeia `users` → `usuarios` | Consistência de idioma com o resto do domínio (ver [entidades/#4](../entidades/README.md#4-entidades)). Model `User` aponta pra `usuarios` via `protected $table`. |
+| `2026_08_28_164944_create_personal_access_tokens_table` | `personal_access_tokens` | Gerada pelo pacote `laravel/sanctum` (`artisan install:api`) — guarda os tokens de autenticação da API. Ver [contratos-api/auth.md](../contratos-api/auth.md). |
 
 ## 5. Migrations planejadas
 
-A preencher conforme o domínio pedagógico (ver [entidades/](../entidades/README.md)) for modelado — cursos, matrículas, avaliações vocais, etc. Cada migration de domínio nova deve ganhar uma linha na tabela acima quando implementada.
+Ordem sugerida, respeitando dependência de chave estrangeira (ver [entidades/](../entidades/README.md)):
+
+- [x] `users`/`usuarios` — adicionar `tipo_user`, renomear tabela
+- [x] `personal_access_tokens` (via Sanctum)
+- [ ] `cursos` — falta preencher as colunas de negócio (só existe o esqueleto id+timestamps)
+- [ ] `curso_gestor` (pivot Curso↔Gestor)
+- [ ] `modulos` (depende de `cursos`)
+- [ ] `modulo_professor` (pivot Módulo↔Professor, com permissões)
+- [ ] `conteudos` (depende de `modulos`)
+- [ ] `avaliacoes` (depende de `modulos`)
+- [ ] `matriculas` (depende de `users` + `cursos`)
+- [ ] `matricula_modulo` (pivot Matrícula↔Módulo, módulos inclusos)
+- [ ] `convites`
+- [ ] `vouchers`
+
+Cada migration nova ganha uma linha na tabela da seção 4 quando implementada.
 
 ## 6. Checklist antes de criar uma migration
 

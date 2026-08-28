@@ -28,7 +28,7 @@ Estas decisões ainda **não foram tomadas** no projeto — a primeira feature d
   - `403` — autenticado mas sem permissão.
   - `404` — recurso não encontrado.
   - `500` — erro não tratado (deve ser exceção rara, não fluxo esperado).
-- **Autenticação**: Laravel Sanctum, Bearer token (`SecurityScheme` já declarado no OpenAPI como `sanctum`). **Status: declarado, ainda não implementado** — nenhuma rota usa `auth:sanctum` hoje.
+- **Autenticação**: Laravel Sanctum, Bearer token (`SecurityScheme` já declarado no OpenAPI como `sanctum`). **Status: implementado** — login/logout funcionando, ver [contratos-api/auth.md](auth.md).
 
 ## 4. Endpoints implementados
 
@@ -43,11 +43,15 @@ Estas decisões ainda **não foram tomadas** no projeto — a primeira feature d
   ```
 - **Propósito**: healthcheck de infraestrutura — não deve depender de banco de dados ou serviços externos, para servir como sonda confiável (load balancer, monitoramento).
 
+### Autenticação (`POST /api/login`, `POST /api/logout`)
+
+- Documentação completa em [contratos-api/auth.md](auth.md).
+
 ## 5. Endpoints planejados
 
 Checklist a atualizar conforme implementado — mover cada item para a seção 4 com o detalhamento completo quando pronto:
 
-- [ ] **Autenticação**: registro, login, logout/revogação de token (Sanctum).
+- [x] **Autenticação**: login, logout/revogação de token (Sanctum). Registro/convites ainda pendente.
 - [ ] **Recursos do domínio pedagógico**: a definir junto com [entidades/](../entidades/README.md).
 
 ## 6. Checklist antes de expor um endpoint novo

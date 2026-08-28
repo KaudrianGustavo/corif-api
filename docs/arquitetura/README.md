@@ -20,8 +20,9 @@ Cliente (browser/app)
 - Orquestrado por `docker-compose.yml`, 3 serviços na rede `corif_network`.
 - `api` só sobe depois que `mysql` está saudável (`depends_on: condition: service_healthy`, via `mysqladmin ping`).
 - Configuração do nginx em `docker/nginx/default.conf`; certificados locais em `docker/certs/`.
+- `mysql` publica a porta `3306` em `127.0.0.1` (`docker-compose.yml`), para permitir acesso via cliente de banco externo (ex.: HeidiSQL) durante o desenvolvimento local. Credenciais em `.env` (`DB_USERNAME`/`DB_PASSWORD` para o usuário de aplicação, `DB_ROOT_PASSWORD` para root).
 
-**Ponto em aberto**: `.env.example` aponta `DB_CONNECTION=sqlite` por padrão (herdado do skeleton do Laravel), enquanto `docker-compose.yml` espera MySQL (`DB_ROOT_PASSWORD`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`). Alinhar o `.env` real de desenvolvimento com o ambiente Docker quando este virar o padrão de uso.
+**Ponto em aberto**: `.env.example` (o template versionado) ainda aponta `DB_CONNECTION=sqlite` por padrão, herdado do skeleton do Laravel — o `.env` real de desenvolvimento já usa MySQL corretamente. Vale atualizar o `.env.example` para refletir MySQL como padrão do projeto, já que é o ambiente que o `docker-compose.yml` espera.
 
 ## 2. Estrutura de pastas
 
@@ -84,5 +85,5 @@ Registrar aqui decisões pendentes até serem resolvidas (e mover para "decidida
 
 - **Formato de resposta padrão da API** (envelope de sucesso/erro) — ver [contratos-api/](../contratos-api/README.md).
 - **Versionamento de rotas** (`/api/v1/...` ou não) — ainda não decidido; avaliar antes do primeiro consumidor externo.
-- **Divergência sqlite/MySQL** no ambiente local (ver seção 1).
+- **`.env.example` desatualizado** (aponta sqlite, projeto usa MySQL) — ver seção 1.
 - **Camada de Services**: ainda não existe nenhuma instância — critério de quando criar está descrito na seção 3, mas o primeiro caso real vai calibrar o padrão do projeto.
