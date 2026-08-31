@@ -57,10 +57,42 @@ Authorization: Bearer {token}
   ```
 - **Response 401**: sem token válido no header.
 
+## `POST /api/registrar/aluno`
+
+- **Autenticação**: nenhuma (rota pública) — autocadastro de Aluno, conforme [entidades/#3](../entidades/README.md#3-cadastro-e-convites).
+- **Request body**:
+  ```json
+  {
+    "name": "Nome do usuário",
+    "email": "usuario@exemplo.com",
+    "password": "senha-do-usuario",
+    "password_confirmation": "senha-do-usuario"
+  }
+  ```
+  Validação: `name` obrigatório (string); `email` obrigatório, formato de e-mail, único em `usuarios`; `password` obrigatório, mínimo 8 caracteres, precisa bater com `password_confirmation` (regra `confirmed`).
+- **Efeito**: cria um `User` em `usuarios` com `tipo_user = 3` (Aluno) fixo — o endpoint não aceita `tipo_user` do request, então só cria Alunos. Sem matrícula em nenhum Curso (autocadastro puro — acesso a curso só viria depois via resgate de Voucher, ainda não implementado).
+- **Response 201**:
+  ```json
+  {
+    "message": "Usuário criado com sucesso",
+    "user": {
+      "id": 1,
+      "name": "Nome do usuário",
+      "email": "usuario@exemplo.com",
+      "tipo_user": 3,
+      "created_at": "...",
+      "updated_at": "..."
+    }
+  }
+  ```
+  (`password` não aparece — oculto pelo `$hidden` do Model.)
+- **Response 422**: e-mail já cadastrado, senha curta/sem confirmação, ou campo ausente — formato padrão de validação do Laravel.
+
 ## Pendências observadas
 
 Registrando aqui pra não perder de vista — não é bloqueio, só o que falta pra fechar o padrão do projeto:
 
 - **Sem documentação OpenAPI ainda**: `AuthController` não tem os atributos `#[OA\...]` que os outros endpoints usam (ver [contratos-api/#1](README.md#1-documentação-viva-openapiswagger)) — os endpoints de login/logout não aparecem em `/api/documentation` por enquanto.
 - **Typo no texto de resposta do logout**: a mensagem retornada é literalmente `"loggout realizado com sucesso"` (com dois "g") — documentado aqui como está hoje, pra refletir o contrato real.
-- **Sem endpoint de registro**: login pressupõe que o usuário já existe na tabela `usuarios` (hoje, só via seeder/tinker). O fluxo de criação de conta (convites, voucher — ver [entidades/#3](../entidades/README.md#3-cadastro-e-convites)) ainda não foi implementado.
+- **Convites ainda não implementados**: só o autocadastro de Aluno (`POST /api/registrar/aluno`) existe hoje. Criação de Gestor/Professor/Aluno-por-convite (ver [entidades/#3](../entidades/README.md#3-cadastro-e-convites)) ainda depende da entidade `Convite`, que não existe.
+- **Campo `confirmed` morto em `registrarAluno()`**: o controller monta `'confirmed' => $request->confirmed` no array passado pro `User::create()`, mas isso não tem efeito — não existe coluna `confirmed` em `usuarios` nem está no `$fillable` do Model `User`, então o valor é descartado silenciosamente. A confirmação de senha já é garantida pela regra de validação `confirmed` (que compara com `password_confirmation`); essa linha parece sobra de uma tentativa manual disso.
