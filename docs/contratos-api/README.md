@@ -43,7 +43,7 @@ Estas decisões ainda **não foram tomadas** no projeto — a primeira feature d
   ```
 - **Propósito**: healthcheck de infraestrutura — não deve depender de banco de dados ou serviços externos, para servir como sonda confiável (load balancer, monitoramento).
 
-### Autenticação (`POST /api/login`, `POST /api/logout`)
+### Autenticação e cadastro (`POST /api/login`, `POST /api/logout`, `POST /api/registrar/aluno`)
 
 - Documentação completa em [contratos-api/auth.md](auth.md).
 
@@ -51,7 +51,7 @@ Estas decisões ainda **não foram tomadas** no projeto — a primeira feature d
 
 Checklist a atualizar conforme implementado — mover cada item para a seção 4 com o detalhamento completo quando pronto:
 
-- [x] **Autenticação**: login, logout/revogação de token (Sanctum). Registro/convites ainda pendente.
+- [x] **Autenticação**: login, logout/revogação de token (Sanctum), autocadastro de Aluno. Convites (Gestor/Professor/Aluno-por-convite) ainda pendente.
 - [ ] **Recursos do domínio pedagógico**: a definir junto com [entidades/](../entidades/README.md).
 
 ## 6. Checklist antes de expor um endpoint novo
