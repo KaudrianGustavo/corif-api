@@ -13,7 +13,15 @@ class EnsureUserHasRole
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response{
+    public function handle(Request $request, Closure $next, ...$roles): Response{
+        $tipoUser = $request->user()->tipo_user;
+
+       if (! in_array($tipoUser, $roles)) {
+        return response()->json([
+            'message'   => 'Acesso negado.'
+        ], 403);
+       }
+
         return $next($request);
     }
 }

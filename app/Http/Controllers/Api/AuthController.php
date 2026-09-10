@@ -65,4 +65,24 @@ class AuthController extends Controller{
         ], 201);
 
     }
+
+    public function registrarGestor(Request $request) {
+        $request->validate([
+            'name'     => 'required|string',
+            'email'    => 'required|email|unique:usuarios',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $gestor = User::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => $request->password,
+            'tipo_user' => 1,
+        ]);
+
+        return response()->json([
+            'message' => 'Gestor criado com sucesso',
+            'user'    => $gestor,
+        ], 201);
+    }
 }
