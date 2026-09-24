@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CursoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', [HealthController::class, 'ping']);
@@ -10,3 +11,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/registrar/aluno', [AuthController::class, 'registrarAluno']);
 Route::post('/registrar/gestores', [AuthController::class, 'registrarGestor'])
     ->middleware(['auth:sanctum', 'role:0']);
+
+Route::middleware(['auth:sanctum', 'role:0,1'])->group(function () {
+    Route::post('/cursos', [CursoController::class, 'store']);
+});
