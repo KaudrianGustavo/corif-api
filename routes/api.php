@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CursoController;
+use App\Http\Controllers\Api\HealthController;
+use App\Http\Controllers\Api\ModuloController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', [HealthController::class, 'ping']);
@@ -14,4 +15,5 @@ Route::post('/registrar/gestores', [AuthController::class, 'registrarGestor'])
 
 Route::middleware(['auth:sanctum', 'role:0,1'])->group(function () {
     Route::post('/cursos', [CursoController::class, 'store']);
+    Route::post('/cursos/{curso}/modulos', [ModuloController::class, 'store']);
 });

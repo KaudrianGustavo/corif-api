@@ -18,4 +18,8 @@ class Curso extends Model {
         return $this->belongsToMany(User::class, 'curso_gestor', 'curso_id', 'gestor_id')->withPivot('criador');
     }
 
+    public function modulos() {
+        return $this->hasMany(Modulo::class)->orderBy('ordem');
+    }
+
 }
